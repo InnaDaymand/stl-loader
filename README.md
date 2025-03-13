@@ -1,0 +1,55 @@
+# StlLoader
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+
+## Development server
+
+To start a local development server, run:
+
+```bash
+ng serve
+```
+
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
+```bash
+ng generate component component-name
+```
+
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Description
+
+1. Application loads two STL files by names 'scanLower.stl', 'scanUpper.stl'
+2. From the package THREE has been used for rendering the base material MeshPhysicalMaterial
+3. contour-shader was used to mark the border margin, which draws the border on texture from the canvas in time postprocessing.
+4. To explore collisions has been used the MeshBvh object (https://github.com/gkjohnson/three-mesh-bvh/), which builds a bounding tree based on the input geometry.
+5. The application allows you to see the fact of the presence to collision. In such a case, one of the two geometries changes color.
+6. For getting the volume of collision, it needs to extend the implementation of MeshBvh, which will allow not only checking collision, but also get the vertices of each pair of intersection of triangles. Also, for each case of triangle intersection we can save the value of the area of intersection.  This information will help us to get an attribute of the depth of collision. Based on the set of vertices, we can build new geometry. For marking the relief of the landscape with new geometry, it needs to write a custom shader. This shader will use the attribute 'depth of collision' for choosing the color.
+
