@@ -1,6 +1,20 @@
 import * as THREE from 'three';
 import {Face, VertexNode} from 'three-stdlib';
+/*
+Analysis of geometry for getting the border between the tooth enamel and the gingival tissue.
 
+The start idea was to use the difference of orientation of normal vectors (cross product).
+But the geometry doesn't allow using such an approach, because the geometry implements the shape of human tissue,
+which is not geometrically predictable.
+
+Second approach (which actually implemented) was based on an idea,
+that faces on the border (which we are looking for) have very small area.
+It is not so in all cases that we can see in an example.
+
+The third approach, which I started researching, is based on ray intersection with the object and analysis
+of distances to different faces of the object. I think this approach needs to be looked into more in detail.*
+*
+* */
 
 export interface IInfoUVertices{
   vertex: THREE.Vector3;

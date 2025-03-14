@@ -52,4 +52,13 @@ ng test
 4. To explore collisions has been used the MeshBvh object (https://github.com/gkjohnson/three-mesh-bvh/), which builds a bounding tree based on the input geometry.
 5. The application allows you to see the fact of the presence to collision. In such a case, one of the two geometries changes color.
 6. For getting the volume of collision, it needs to extend the implementation of MeshBvh, which will allow not only checking collision, but also get the vertices of each pair of intersection of triangles. Also, for each case of triangle intersection we can save the value of the area of intersection.  This information will help us to get an attribute of the depth of collision. Based on the set of vertices, we can build new geometry. For marking the relief of the landscape with new geometry, it needs to write a custom shader. This shader will use the attribute 'depth of collision' for choosing the color.
+7. Analysis of geometry for getting the border between the tooth enamel and the gingival tissue.
 
+The start idea was to use the difference of orientation of normal vectors (cross product). But the geometry doesn't allow using such an approach, because the geometry implements the shape of human tissue, which is not geometrically predictable.
+
+Second approach (which actually implemented) was based on an idea, that faces on the border (which we are looking for) have very small area. It is not so in all cases that we can see in an example.
+
+The third approach, which I started researching, is based on ray intersection with the object and analysis of distances to different faces of the object. I think this approach needs to be looked into more in detail.*
+
+8. GUI controller can be used for checking the intersection of two geometries
+9. Application can work with different examples. For changing examples, it needs to change the input files with the same names ('scan_up', 'scan_down') in the folder /public
