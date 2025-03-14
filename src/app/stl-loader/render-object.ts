@@ -155,31 +155,54 @@ export class RenderObject {
     const crossP=new THREE.Vector3();
     crossP.crossVectors(face1.normal, face2.normal);
     const len_cross_n=crossP.length();
-    if(len_cross_n >=0.04 && len_cross_n <= 0.5){
+    if(len_cross_n >=0.1 && len_cross_n <= 0.4){
       this.setOnBorder(index1);
     }
-    if(len_cross_n >= 0.5 && len_cross_n <=0.7){
-      this.setOnContour(index1);
+    if(len_cross_n >= 0.4 && len_cross_n <=0.8){
+      this.setOnBorder(index1);
     }
-    if(len_cross_n >= 0.7&& len_cross_n <=0.99){
+    if(len_cross_n >= 0.8 && len_cross_n <=1){
       this.setOnBorder1(index1);
     }
   }
 
 
-  contourAnalysis(){
-    let count_borders = 0;
-    for(let i = 0; i < this.describeMesh.length; i++){
-      const info = this.describeMesh[i];
-      if (info.onBorder || info.onBorder1 || info.onContour){
-        count_borders+=1;
+  faceAnalysis(){
+    let min_area = 100000;
+    let average_area = 0;
+    let max_area = 0;
+    for(let i = 0; i < this.facesMesh.length; i++){
+      const info_face = this.facesMesh[i];
+      if (info_face.area < min_area) min_area = info_face.area;
+      if(info_face.area > max_area) max_area = info_face.area;
+      average_area = average_area + info_face.area;
+   }
+    let count_min =0;
+    let count_min_avv =0;
+    average_area = average_area/this.facesMesh.length;
+    let min_min_av = 10000;
+    let max_min_av = 0;
+    let av_min_av = 0;
+    for(let i = 0; i < this.facesMesh.length; i++) {
+      const info_face = this.facesMesh[i];
+      if (info_face.area === min_area)
+        count_min++;
+      if(info_face.area > 0 && info_face.area <= average_area){
+        count_min_avv++
+        if (info_face.area < min_min_av) min_min_av = info_face.area;
+        if (info_face.area > max_min_av) max_min_av = info_face.area;
+        av_min_av = av_min_av + info_face.area;
       }
     }
-    const diff = this.describeMesh.length - count_borders;
+    av_min_av = av_min_av / count_min_avv;
+    return {'min_area': min_min_av, 'average_area': av_min_av};
   }
 
   // information for analysis for getting attributes contour/border
   makeSilhouette(){
+    const analysis = this.faceAnalysis();
+    const min_area= analysis['min_area'];
+    const average_area = analysis['average_area'];
     for(let i=0; i < this.describeMesh.length; i+=1){
       const descr_mesh = this.describeMesh[i];
       const face1 = this.facesMesh[descr_mesh.faces[0]];
@@ -188,6 +211,10 @@ export class RenderObject {
       this.testEdge(face1, face2, i);
       this.testEdge(face1, face3, i);
       this.testEdge(face2, face3, i);
+      if (face1.area >min_area && face1.area <=average_area || face2.area > min_area && face2.area <=average_area
+        || face3.area > min_area && face3.area <= average_area){
+        descr_mesh.onContour=true;
+      }
     }
     if(this.isContours === undefined){
       this.isContours = new Float32Array(this.describeMesh.length*3);
