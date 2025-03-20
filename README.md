@@ -51,8 +51,8 @@ ng test
 3. contour-shader was used to mark the border margin, which draws the border on texture from the canvas in time postprocessing.
 4. To explore collisions has been used the MeshBvh object (https://github.com/gkjohnson/three-mesh-bvh/), which builds a bounding tree based on the input geometry.
 5. The application allows you to see the fact of the presence to collision. In such a case, one of the two geometries changes color.
-6. For getting the volume of collision, it needs to extend the implementation of MeshBvh, which will allow not only checking collision, but also get the vertices of each pair of intersection of triangles. Also, for each case of triangle intersection we can save the value of the area of intersection.  This information will help us to get an attribute of the depth of collision. Based on the set of vertices, we can build new geometry. For marking the relief of the landscape with new geometry, it needs to write a custom shader. This shader will use the attribute 'depth of collision' for choosing the color.
-![](/Users/innadaymand/Projects/stl-loader/intersection.png)
+6. For getting the volume of collision, it needs to extend the implementation of MeshBvh, which will allow not only checking collision, but also get the vertices of each pair of intersection of triangles. Also, for each case of triangle intersection we can save the value of the area of intersection. This information will help us to get an attribute of the depth of collision. Based on the set of vertices, we can build new geometry. For marking the relief of the landscape with new geometry, it needs to write a custom shader. This shader will use the attribute 'depth of collision' for choosing the color.
+   <img height="400" src="/Users/innadaymand/Projects/stl-loader/intersection.png" width="640"/>
 7. Analysis of geometry for getting the border between the tooth enamel and the gingival tissue.
 
 The start idea was to use the difference of orientation of normal vectors (cross product). But the geometry doesn't allow using such an approach, because the geometry implements the shape of human tissue, which is not geometrically predictable.
@@ -61,7 +61,7 @@ Second approach (which actually implemented) was based on an idea, that faces on
 
 The third approach, which I started researching, is based on the paper https://onlinelibrary.wiley.com/doi/10.1155/2010/535329. My idea is to combine an approach from this paper with the implementation of boundsTree from the https://github.com/gkjohnson/three-mesh-bvh/ package to get vertices that represent minimum curvature < 0 (valleys) and display these points in the shader.
 
-![](/Users/innadaymand/Projects/stl-loader/border.png)
+<img height="400" src="/Users/innadaymand/Projects/stl-loader/border.png" width="640"/>
 
 8. GUI controller can be used for checking the intersection of two geometries
 9. Application can work with different examples. For changing examples, it needs to change the input files with the same names ('scan_up', 'scan_down') in the folder /public
